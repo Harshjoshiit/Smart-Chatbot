@@ -82,5 +82,4 @@ Prerequisites: Node.js (v18+), npm, and a Gemini API key.
 Clone the repository and move into the project root:
 
 ```bash
-git clone https://github.com/Harshjoshiit/cimba-rag-chatbot.git
-cd cimba-rag-chatbot
+git clone https://github.com/Harshjoshiit/Smart-Chatbot.git
