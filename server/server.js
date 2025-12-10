@@ -12,17 +12,12 @@ const PORT = process.env.PORT || 5000;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 // ----------------------------------------------------
-// Middleware: Updated CORS Policy for Vercel Deployment
-// ----------------------------------------------------
 
-// CRITICAL FIX: The custom domain is explicitly listed, and the REGEX catches preview links.
 const allowedOrigins = [
     'http://localhost:5173', // For local development
-    'https://cimba.vercel.app', // **Your specific custom domain**
+    'https://cimba.vercel.app', // **custom domain**
 ];
 
-// Regex to catch all dynamic Vercel subdomains (e.g., cimba-bx8q93ud0-...)
-// This is necessary because Vercel creates unique subdomains for every push.
 const VERCEL_REGEX = /^https:\/\/cimba-.*\.vercel\.app$/;
 
 app.use(cors({
@@ -43,7 +38,7 @@ app.use(cors({
     credentials: true,
 }));
 
-app.use(express.json()); // To parse incoming JSON requests
+app.use(express.json());
 
 // ----------------------------------------------------
 // Database Initialization (Steps 4 & 5)
@@ -228,3 +223,4 @@ app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
     console.log('Backend Ready. Start React app next.');
 });
+
