@@ -29,7 +29,7 @@ This project implements a **RAG-based chatbot** that retrieves relevant FAQ docu
 - Node.js
 - Express.js
 - SQLite (FAQ database)
-- Gemini API (LLM)
+- Gemini-2.5-flash API (LLM)
 - Axios
 - Vercel
 - Render
