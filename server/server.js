@@ -11,10 +11,33 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
-// Middleware
+// ----------------------------------------------------
+// Middleware: Updated CORS Policy for Vercel Deployment
+// ----------------------------------------------------
+
+const allowedOrigins = [
+    'http://localhost:5173', // For local development
+    'https://cimba.vercel.app', // CRITICAL: The live Vercel frontend URL
+];
+
 app.use(cors({
-    origin: 'http://localhost:5173' // Allow requests from React frontend
+    origin: (origin, callback) => {
+        // Allow requests with no origin (e.g., Postman or server-to-server)
+        if (!origin) return callback(null, true); 
+        
+        // Check if the origin is in our allowed list
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            // Log the blocked origin for troubleshooting
+            console.log('CORS blocked origin:', origin);
+            callback(new Error(`Not allowed by CORS policy. Origin: ${origin}`));
+        }
+    },
+    methods: 'GET,POST',
+    credentials: true,
 }));
+
 app.use(express.json()); // To parse incoming JSON requests
 
 // ----------------------------------------------------
@@ -102,7 +125,6 @@ app.post('/api/chat', async (req, res) => {
         
         // Use an asynchronous promise wrapper for SQLite
         const retrievedContext = await new Promise((resolve, reject) => {
-            // SQL query: Now uses the generated whereClause for better relevance
             const sql = `
                 SELECT question, answer FROM faqs 
                 WHERE ${whereClause} 
@@ -130,7 +152,6 @@ app.post('/api/chat', async (req, res) => {
 
 
         // STEP 7: Construct the LLM Prompt (Augmentation)
-        // Note: The prompt still prioritizes the internal context (CONTEXT section)
         const augmentedPrompt = `
             You are a helpful customer support chatbot for a company. Your answers MUST be based ONLY on the provided context 
             from our company's FAQs. Do not use outside knowledge. 
@@ -152,12 +173,11 @@ app.post('/api/chat', async (req, res) => {
         let attempt = 0;
         let geminiResponse;
 
-        // ** ADDING GOOGLE SEARCH GROUNDING TOOL HERE **
+        // ** GOOGLE SEARCH GROUNDING TOOL IS INCLUDED HERE **
         const payload = {
             contents: [
                 { role: "user", parts: [{ text: augmentedPrompt }] }
             ],
-            // This enables the model to access Google Search for up-to-date grounding
             tools: [{ "google_search": {} }] 
         };
 
