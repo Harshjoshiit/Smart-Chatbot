@@ -16,7 +16,7 @@ https://smart-chatbot-uikw.onrender.com/
 FAQs Doc link:
 https://docs.google.com/document/d/1fVNbEehus96AFYs9cDbYI91xDr-PAwjhU3IVxvRVtcU/edit?usp=sharing
 
-Note: The Gemini API key may reach its usage limit during consecutive or repeated chatbot interactions, depending on free-tier quota constraints.
+Note: The Gemini API key may reach its usage limit during consecutive or repeated chatbot interactions, due to free-tier quota constraints.
 
 ---
 
