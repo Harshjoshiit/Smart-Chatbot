@@ -63,6 +63,9 @@ This project implements a **RAG-based chatbot** that retrieves relevant FAQ docu
 
 ## 📸 Screenshots
 
+- FAQs
+- <img width="1539" height="142" alt="image" src="https://github.com/user-attachments/assets/945b1753-5e32-43d9-805f-ebffdc3a4a4c" />
+
 - Chat Interface
 - <img width="1343" height="807" alt="image" src="https://github.com/user-attachments/assets/1e66785d-10b9-4e43-8a5e-bd48401acf4a" />
 
