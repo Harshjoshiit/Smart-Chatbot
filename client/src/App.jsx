@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Send, Loader2, MessageSquare, Bot, User } from 'lucide-react';
 
 // Base URL for the backend API
-const API_URL = 'http://localhost:5000/api/chat';
+const API_URL = 'https://smart-chatbot-uikw.onrender.com/api/chat';
 
 // Component to represent a single message in the chat
 const Message = ({ message }) => {
