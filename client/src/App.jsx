@@ -3,7 +3,10 @@ import axios from 'axios';
 import { Send, Loader2, MessageSquare, Bot, User } from 'lucide-react';
 
 // Base URL for the backend API
-const API_URL = 'https://smart-chatbot-uikw.onrender.com/api/chat';
+// CRITICAL FIX: Use the VITE_API_URL environment variable set in Vercel.
+const API_URL = import.meta.env.VITE_API_URL; 
+// Fallback for local development if .env is not fully set up for VITE variables
+const FALLBACK_API_URL = 'http://localhost:5000/api/chat'; 
 
 // Component to represent a single message in the chat
 const Message = ({ message }) => {
@@ -44,6 +47,18 @@ const App = () => {
     const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef(null);
 
+    // Determine the correct API URL for the environment
+    const currentApiUrl = API_URL || FALLBACK_API_URL;
+
+    // TEMPORARY SANITY CHECK: Check which URL is being used by the build
+    useEffect(() => {
+        console.log("✅ LIVE API URL Check:", currentApiUrl);
+        if (currentApiUrl.includes('localhost')) {
+             console.warn("⚠️ WARNING: Frontend is running in local/fallback mode. Check VERCEL deployment environment variables.");
+        }
+    }, [currentApiUrl]);
+
+
     // Auto-scrolls to the bottom of the chat history (Step 11 requirement)
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -76,15 +91,15 @@ const App = () => {
 
         // 2. Call the backend API
         try {
-            const response = await axios.post(API_URL, { userQuery: userMessage });
+            const response = await axios.post(currentApiUrl, { userQuery: userMessage });
             const botResponse = { sender: 'bot', text: response.data.text };
             
             // 3. Add bot response (Step 11)
             setMessages(prev => [...prev, botResponse]);
 
         } catch (error) {
-            console.error('API Error:', error);
-            const errorMessage = `Sorry, I couldn't connect to the support server. Please ensure the backend (http://localhost:5000) is running and check your console for details.`;
+            console.error('API Error:', error.response ? error.response.data : error.message);
+            const errorMessage = `Sorry, I couldn't connect to the support server (${currentApiUrl}). Please ensure the backend is live. Details in console.`;
             setMessages(prev => [...prev, { sender: 'bot', text: errorMessage }]);
         } finally {
             setIsLoading(false);
