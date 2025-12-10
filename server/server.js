@@ -15,18 +15,22 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 // Middleware: Updated CORS Policy for Vercel Deployment
 // ----------------------------------------------------
 
+// CRITICAL FIX: Allow all subdomains of the Vercel app
 const allowedOrigins = [
     'http://localhost:5173', // For local development
-    'https://cimba.vercel.app', // CRITICAL: The live Vercel frontend URL
+    'https://cimba.vercel.app', // The main Vercel domain
 ];
+
+// Use a RegExp to allow specific subdomains from Vercel deployments
+const VERCEL_REGEX = /^https:\/\/cimba-.*\.vercel\.app$/;
 
 app.use(cors({
     origin: (origin, callback) => {
         // Allow requests with no origin (e.g., Postman or server-to-server)
         if (!origin) return callback(null, true); 
         
-        // Check if the origin is in our allowed list
-        if (allowedOrigins.includes(origin)) {
+        // Check if the origin is in our allowed list OR matches the Vercel pattern
+        if (allowedOrigins.includes(origin) || VERCEL_REGEX.test(origin)) {
             callback(null, true);
         } else {
             // Log the blocked origin for troubleshooting
