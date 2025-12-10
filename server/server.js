@@ -15,13 +15,14 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 // Middleware: Updated CORS Policy for Vercel Deployment
 // ----------------------------------------------------
 
-// CRITICAL FIX: Allow all subdomains of the Vercel app
+// CRITICAL FIX: The custom domain is explicitly listed, and the REGEX catches preview links.
 const allowedOrigins = [
     'http://localhost:5173', // For local development
-    'https://cimba.vercel.app', // The main Vercel domain
+    'https://cimba.vercel.app', // **Your specific custom domain**
 ];
 
-// Use a RegExp to allow specific subdomains from Vercel deployments
+// Regex to catch all dynamic Vercel subdomains (e.g., cimba-bx8q93ud0-...)
+// This is necessary because Vercel creates unique subdomains for every push.
 const VERCEL_REGEX = /^https:\/\/cimba-.*\.vercel\.app$/;
 
 app.use(cors({
