@@ -2,10 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { Send, Loader2, MessageSquare, Bot, User } from 'lucide-react';
 
-// Base URL for the backend API
-// CRITICAL FIX: Use the VITE_API_URL environment variable set in Vercel.
 const API_URL = import.meta.env.VITE_API_URL; 
-// Fallback for local development if .env is not fully set up for VITE variables
 const FALLBACK_API_URL = 'http://localhost:5000/api/chat'; 
 
 // Component to represent a single message in the chat
@@ -47,10 +44,10 @@ const App = () => {
     const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef(null);
 
-    // Determine the correct API URL for the environment
+    
     const currentApiUrl = API_URL || FALLBACK_API_URL;
 
-    // TEMPORARY SANITY CHECK: Check which URL is being used by the build
+   
     useEffect(() => {
         console.log("✅ LIVE API URL Check:", currentApiUrl);
         if (currentApiUrl.includes('localhost')) {
@@ -58,8 +55,6 @@ const App = () => {
         }
     }, [currentApiUrl]);
 
-
-    // Auto-scrolls to the bottom of the chat history (Step 11 requirement)
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
@@ -68,7 +63,6 @@ const App = () => {
         scrollToBottom();
     }, [messages]);
 
-    // Initial message on load
     useEffect(() => {
         setMessages([{
             sender: 'bot',
